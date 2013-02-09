@@ -81,6 +81,7 @@ void MainWindow::initIcon()
 void MainWindow::initMenu()
 {
 
+    //test
 }
 
 void MainWindow::initToolbar()
