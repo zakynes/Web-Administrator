@@ -26,6 +26,7 @@ private:
     // --- Functions
     void initAction();
     void initIcon();
+    void initShortcut();
     void initMenu();
     void initToolbar();
     void initWindows();
@@ -38,6 +39,7 @@ private:
     QToolBar* toolBar;
     QTextEdit* textEdit;
     QTreeView* tree;
+    QDockWidget* dock;
 
     //Actions
     QAction* aCouper;
@@ -54,7 +56,7 @@ private:
 
     QAction* aAligneLeft;
     QAction* aAligneRight;
-    QAction* aAlgneCenter;
+    QAction* aAligneCenter;
     QAction* aJustify;
 
     QAction* aListe;
@@ -68,7 +70,16 @@ private:
     QAction* aImage;
     QAction* aVideo;
 
+    QAction* aUndo;
+    QAction* aRedo;
+
     QAction* aHelp;
+
+    //Action menu
+    QAction* aClose;
+    QAction* aListServer;
+    QAction* aAbout;
+    QAction* aOption;
 
     //Icones
     QIcon* iCouper;
@@ -85,7 +96,7 @@ private:
 
     QIcon* iAligneLeft;
     QIcon* iAligneRight;
-    QIcon* iAlgneCenter;
+    QIcon* iAligneCenter;
     QIcon* iJustify;
 
     QIcon* iListe;
@@ -97,6 +108,9 @@ private:
     QIcon* iLien;
     QIcon* iImage;
     QIcon* iVideo;
+
+    QIcon* iUndo;
+    QIcon* iRedo;
 
     QIcon* iHelp;
 

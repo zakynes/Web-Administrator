@@ -51,4 +51,6 @@ OTHER_FILES += \
     ressources/images/balise.png \
     ressources/images/annuler.png \
     ressources/images/alignerGauche.png \
-    ressources/images/alignerDroite.png
+    ressources/images/alignerDroite.png \
+    ressources/images/icone128.png \
+    ressources/images/icone48.png

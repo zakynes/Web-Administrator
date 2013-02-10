@@ -3,7 +3,6 @@
 #include <QKeySequence>
 #include <QDockWidget>
 #include <QLabel>
-#include <QLayout>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
