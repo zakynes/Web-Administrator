@@ -1,0 +1,14 @@
+#ifndef BLOCK_H
+#define BLOCK_H
+
+#include "page.h"
+
+class Block : public Page
+{
+    Q_OBJECT
+
+public:
+    Block();
+};
+
+#endif // BLOCK_H

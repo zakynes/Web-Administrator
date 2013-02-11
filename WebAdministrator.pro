@@ -13,9 +13,23 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    textedit.cpp \
+    highlighter.cpp \
+    dialoglien.cpp \
+    dialogtable.cpp \
+    siteview.cpp \
+    block.cpp \
+    page.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    textedit.h \
+    highlighter.h \
+    dialoglien.h \
+    dialogtable.h \
+    siteview.h \
+    block.h \
+    page.h
 
 FORMS    += mainwindow.ui
 
@@ -53,4 +67,6 @@ OTHER_FILES += \
     ressources/images/alignerGauche.png \
     ressources/images/alignerDroite.png \
     ressources/images/icone128.png \
-    ressources/images/icone48.png
+    ressources/images/icone48.png \
+    ressources/images/options.png \
+    ressources/images/listeServer.png

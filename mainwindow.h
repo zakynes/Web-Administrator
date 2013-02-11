@@ -6,9 +6,13 @@
 #include <QMenu>
 #include <QToolBar>
 #include <QMenuBar>
-#include <QTextEdit>
 #include <QTreeView>
 #include <QIcon>
+#include <QStackedWidget>
+#include <QSpinBox>
+
+#include "textedit.h"
+#include "highlighter.h"
 
 namespace Ui {
 class MainWindow;
@@ -21,6 +25,14 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+public slots:
+    void switchTextEdit();
+    void selectColor();
+    void selectBackgroundColor();
+    void majToolsValue();
+    void openAbout();
+    void openHelp();
     
 private:
     // --- Functions
@@ -37,9 +49,14 @@ private:
     Ui::MainWindow *ui;
     QMenuBar* menuBar;
     QToolBar* toolBar;
-    QTextEdit* textEdit;
+    TextEdit* textEdit;
+    QTextEdit* plainTextEdit;
     QTreeView* tree;
     QDockWidget* dock;
+    bool richText;
+    QStackedWidget* editWidget;
+    Highlighter *highlighter;
+    QSpinBox *fontSize;
 
     //Actions
     QAction* aCouper;
@@ -58,6 +75,9 @@ private:
     QAction* aAligneRight;
     QAction* aAligneCenter;
     QAction* aJustify;
+
+    QAction* aSwitchRiche;
+    QAction* aSwitchHtml;
 
     QAction* aListe;
     QAction* aTableau;
@@ -99,6 +119,9 @@ private:
     QIcon* iAligneCenter;
     QIcon* iJustify;
 
+    QIcon* iSwitchRiche;
+    QIcon* iSwitchHtml;
+
     QIcon* iListe;
     QIcon* iTableau;
 
@@ -113,6 +136,9 @@ private:
     QIcon* iRedo;
 
     QIcon* iHelp;
+
+    QIcon* iListServer;
+    QIcon* iOption;
 
     //Menu
     QMenu* mFichier;

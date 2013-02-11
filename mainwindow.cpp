@@ -3,7 +3,9 @@
 #include <QKeySequence>
 #include <QDockWidget>
 #include <QLabel>
-#include <QLayout>
+#include <QTextDocumentFragment>
+
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -18,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
     initAction();
     initToolbar();
     initMenu();
+
+    majToolsValue();
 }
 
 MainWindow::~MainWindow()
@@ -46,12 +50,17 @@ void MainWindow::initAction()
     aAligneCenter = new QAction(*iAligneCenter, tr("Centrer"), this);
     aJustify = new QAction(*iJustify, tr("Justifier"), this);
 
+    aSwitchRiche = new QAction(*iSwitchRiche, tr("Mode riche"), this);
+    aSwitchHtml = new QAction(*iSwitchHtml, tr("Mode HTML"), this);
+    aSwitchRiche->setEnabled(false);
+
     aListe = new QAction(*iListe, tr("Liste"), this);
     aTableau = new QAction(*iTableau, tr("Tableau"), this);
 
     aCouleur = new QAction(*iCouleur, tr("Couleur du text"), this);
     aCouleurFond = new QAction(*iCouleurFond, tr("Couleur de fond"), this);
     aTaille = new QAction(tr("Taille de police"), this);
+    fontSize = new QSpinBox();
 
     aLien = new QAction(*iLien, tr("Lien"), this);
     aImage = new QAction(*iImage, tr("Image"), this);
@@ -63,14 +72,42 @@ void MainWindow::initAction()
     aHelp = new QAction(*iHelp, tr("Aide"), this);
 
     aClose = new QAction(tr("Fermer"), this);
-    aListServer = new QAction(tr("Liste de serveurs"), this);
+    aListServer = new QAction(*iListServer, tr("Liste de serveurs"), this);
     aAbout = new QAction(tr("A propos"), this);
-    aOption = new QAction(tr("Options"), this);
+    aOption = new QAction(*iOption, tr("Options"), this);
 
     initShortcut();
 
     //Event
     connect(aClose, SIGNAL(triggered()), this, SLOT(close()));
+    connect(aHelp, SIGNAL(triggered()), this, SLOT(openHelp()));
+    connect(aAbout, SIGNAL(triggered()), this, SLOT(openAbout()));
+    connect(aSwitchRiche, SIGNAL(triggered()), this, SLOT(switchTextEdit()));
+    connect(aSwitchHtml, SIGNAL(triggered()), this, SLOT(switchTextEdit()));
+
+    //Editing event
+    connect(aUndo, SIGNAL(triggered()), textEdit, SLOT(undo()));
+    connect(aRedo, SIGNAL(triggered()), textEdit, SLOT(redo()));
+    connect(aCopier, SIGNAL(triggered()), textEdit, SLOT(copy()));
+    connect(aCouper, SIGNAL(triggered()), textEdit, SLOT(cut()));
+    connect(aColler, SIGNAL(triggered()), textEdit, SLOT(paste()));
+    connect(aGras, SIGNAL(triggered()), textEdit, SLOT(bold()));
+    connect(aItalique, SIGNAL(triggered()), textEdit, SLOT(italic()));
+    connect(aSouligner, SIGNAL(triggered()), textEdit, SLOT(underligne()));
+    connect(aAligneLeft, SIGNAL(triggered()), textEdit, SLOT(alignLeft()));
+    connect(aAligneRight, SIGNAL(triggered()), textEdit, SLOT(alignRight()));
+    connect(aAligneCenter, SIGNAL(triggered()), textEdit, SLOT(center()));
+    connect(aJustify, SIGNAL(triggered()), textEdit, SLOT(justify()));
+    connect(aListe, SIGNAL(triggered()), textEdit, SLOT(insertList()));
+    connect(aTableau, SIGNAL(triggered()), textEdit, SLOT(insertTable()));
+    connect(aLien, SIGNAL(triggered()), textEdit, SLOT(insertLien()));
+    connect(aImage, SIGNAL(triggered()), textEdit, SLOT(insertPicture()));
+    connect(aVideo, SIGNAL(triggered()), textEdit, SLOT(insertMovie()));
+    connect(fontSize, SIGNAL(valueChanged(int)), textEdit, SLOT(changeFontSize(int)));
+    connect(aCouleur, SIGNAL(triggered()), textEdit, SLOT(changeTextColor()));
+    connect(aCouleurFond, SIGNAL(triggered()), textEdit, SLOT(changeBackgroundColor()));
+
+    //For test
 }
 
 void MainWindow::initIcon()
@@ -92,6 +129,9 @@ void MainWindow::initIcon()
     iAligneCenter = new QIcon("ressources/images/centrer.png");
     iJustify = new QIcon("ressources/images/justifier.png");
 
+    iSwitchRiche = new QIcon("ressources/images/page.png");
+    iSwitchHtml = new QIcon("ressources/images/html.png");
+
     iListe = new QIcon("ressources/images/liste.png");
     iTableau = new QIcon("ressources/images/tableau.png");
 
@@ -106,6 +146,9 @@ void MainWindow::initIcon()
     iRedo = new QIcon("ressources/images/refaire.png");
 
     iHelp = new QIcon("ressources/images/aide.png");
+
+    iListServer = new QIcon("ressources/images/listeServer.png");
+    iOption = new QIcon("ressources/images/options.png");
 }
 
 void MainWindow::initShortcut()
@@ -161,10 +204,12 @@ void MainWindow::initMenu()
     mEdition->addAction(aAligneCenter);
     mEdition->addAction(aJustify);
     mEdition->addSeparator();
+    mEdition->addAction(aSwitchRiche);
+    mEdition->addAction(aSwitchHtml);
+    mEdition->addSeparator();
     mEdition->addAction(aListe);
     mEdition->addAction(aTableau);
     mEdition->addSeparator();
-    mEdition->addAction(aTaille);
     mEdition->addAction(aCouleur);
     mEdition->addAction(aCouleurFond);
     mEdition->addSeparator();
@@ -212,10 +257,14 @@ void MainWindow::initToolbar()
     toolBar->addAction(aAligneCenter);
     toolBar->addAction(aJustify);
     toolBar->addSeparator();
+    toolBar->addAction(aSwitchRiche);
+    toolBar->addAction(aSwitchHtml);
+    toolBar->addSeparator();
     toolBar->addAction(aListe);
     toolBar->addAction(aTableau);
     toolBar->addSeparator();
-    toolBar->addAction(aTaille);
+    //toolBar->addAction(aTaille);
+    toolBar->addWidget(fontSize);
     toolBar->addAction(aCouleur);
     toolBar->addAction(aCouleurFond);
     toolBar->addSeparator();
@@ -241,9 +290,29 @@ void MainWindow::initWindows()
 
 void MainWindow::initTextEdit()
 {
-    textEdit = new QTextEdit();
+    //Define riche text editing default
+    richText = true;
+
+    //Set the layout
+    editWidget = new QStackedWidget();
+
+    //Rich text
+    textEdit = new TextEdit();
     textEdit->setContentsMargins(20, 20, 20, 20);
-    this->setCentralWidget(textEdit);
+    textEdit->insertHtml("<h1>titre test</h1><p>text <strong>test</strong><br />test pour le bold<p/>");
+    editWidget->addWidget(textEdit);
+    //maj tools
+    connect(textEdit, SIGNAL(cursorPositionChanged()), this, SLOT(majToolsValue()));
+    connect(textEdit, SIGNAL(selectionChanged()), this, SLOT(majToolsValue()));
+    connect(textEdit, SIGNAL(textChanged()), this, SLOT(majToolsValue()));
+
+    //Plain text
+    plainTextEdit = new QTextEdit();
+    highlighter = new Highlighter(plainTextEdit->document());
+    editWidget->addWidget(plainTextEdit);
+
+    editWidget->setCurrentIndex(0);
+    this->setCentralWidget(editWidget);
 }
 
 void MainWindow::initTree()
@@ -257,4 +326,124 @@ void MainWindow::initTree()
     tree->setMinimumWidth(10);
     dock->setWidget(tree);
     this->addDockWidget(Qt::LeftDockWidgetArea, dock);
+}
+
+void MainWindow::switchTextEdit()
+{
+    if(richText)
+    {
+        //switch to plain text to edit html
+        plainTextEdit->setPlainText(textEdit->toHtml());
+        editWidget->setCurrentIndex(1);
+        richText = false;
+    }
+    else
+    {
+        //switch to rich text
+        textEdit->setHtml(plainTextEdit->toPlainText());
+        editWidget->setCurrentIndex(0);
+        richText = true;
+    }
+
+    //switch tools
+    aGras->setEnabled(richText);
+    aItalique->setEnabled(richText);
+    aSouligner->setEnabled(richText);
+    aAligneLeft->setEnabled(richText);
+    aAligneRight->setEnabled(richText);
+    aAligneCenter->setEnabled(richText);
+    aJustify->setEnabled(richText);
+    aSwitchRiche->setEnabled(!richText);
+    aSwitchHtml->setEnabled(richText);
+    aListe->setEnabled(richText);
+    aTableau->setEnabled(richText);
+    fontSize->setEnabled(richText);
+    aCouleur->setEnabled(richText);
+    aCouleurFond->setEnabled(richText);
+    aLien->setEnabled(richText);
+    aImage->setEnabled(richText);
+    aVideo->setEnabled(richText);
+}
+void MainWindow::selectColor()
+{
+
+}
+
+void MainWindow::selectBackgroundColor()
+{
+
+}
+
+void MainWindow::majToolsValue()
+{
+    //Font size
+    fontSize->setValue(textEdit->textCursor().charFormat().font().pointSize());
+
+    //Bold
+    aGras->setCheckable(true);
+    if(textEdit->fontWeight() == QFont::Bold)
+        aGras->setChecked(true);
+    else
+        aGras->setChecked(false);
+
+    //Italic
+    aItalique->setCheckable(true);
+    if(textEdit->fontItalic())
+        aItalique->setChecked(true);
+    else
+        aItalique->setChecked(false);
+
+    //Underline
+    aSouligner->setCheckable(true);
+    if(textEdit->fontUnderline())
+        aSouligner->setChecked(true);
+    else
+        aSouligner->setChecked(false);
+
+    //Alignment
+    aAligneLeft->setEnabled(true);
+    aAligneRight->setEnabled(true);
+    aAligneCenter->setEnabled(true);
+    aJustify->setEnabled(true);
+    switch(textEdit->alignment())
+    {
+    case Qt::AlignLeft:
+            aAligneLeft->setEnabled(false);
+            break;
+    case Qt::AlignRight:
+            aAligneRight->setEnabled(false);
+            break;
+    case Qt::AlignCenter:
+            aAligneCenter->setEnabled(false);
+            break;
+    case Qt::AlignJustify:
+            aJustify->setEnabled(false);
+            break;
+    default:
+        break;
+    }
+}
+
+void MainWindow::openAbout()
+{
+    QMessageBox message;
+
+    message.setText(tr("<strong>A propos!</strong>"));
+    message.setInformativeText(tr("Version : 1.0.1 \n Auteur : Zakynes"));
+    message.setStandardButtons(QMessageBox::Ok);
+    message.setDefaultButton(QMessageBox::Ok);
+
+    message.exec();
+}
+
+void MainWindow::openHelp()
+{
+    QMessageBox message;
+
+    message.setText(tr("<strong>Aide</strong>"));
+    message.setInformativeText(tr("Il n'y a pas de document d'aide encore disponible"));
+    message.setStandardButtons(QMessageBox::Ok);
+    message.setDefaultButton(QMessageBox::Ok);
+
+    message.exec();
 }

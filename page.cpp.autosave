@@ -1,0 +1,9 @@
+#include "page.h"
+
+Page::Page(QString name, int index, bool pMultibloc, bool pOrdonable):
+    pageName(name),
+    pageIndex(index),
+    multiBlock(pMultibloc),
+    ordonable(pOrdonable)
+{
+}
