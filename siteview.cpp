@@ -1,5 +1,7 @@
 #include "siteview.h"
 
-SiteView::SiteView()
+SiteView::SiteView(QWidget *parent) :
+    QTreeView(parent)
 {
+
 }

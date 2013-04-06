@@ -8,6 +8,12 @@ DialogTable::DialogTable(int *row, int *col, QString *titre, QWidget *parent):
         parentCol(col),
         parentTitre(titre)
 {
+    editRow = 0;
+    editCol = 0;
+    editTitre = 0;
+    ok = 0;
+    cancel = 0;
+
     editRow = new QSpinBox();
     editCol = new QSpinBox();
     editRow->setValue(*row);
@@ -41,6 +47,16 @@ DialogTable::DialogTable(int *row, int *col, QString *titre, QWidget *parent):
     connect(cancel, SIGNAL(released()), this, SLOT(close()));
 
     setModal(true);
+}
+
+
+DialogTable::~DialogTable()
+{
+    delete editRow;
+    delete editCol;
+    delete editTitre;
+    delete ok;
+    delete cancel;
 }
 
 void DialogTable::valider()

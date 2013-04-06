@@ -3,6 +3,10 @@
 
 #include <QSyntaxHighlighter>
 
+namespace WA_UI {
+class Highlighter;
+}
+
 class Highlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
@@ -12,28 +16,14 @@ public:
 protected:
     void highlightBlock(const QString &text);
 
-private:
-    struct HighlightingRule
-    {
-        QRegExp pattern;
-        QTextCharFormat format;
-    };
-    QVector<HighlightingRule> highlightingRules;
-
-    QRegExp commentStartExpression;
-    QRegExp commentEndExpression;
-
-    QTextCharFormat keywordFormat;
-    QTextCharFormat classFormat;
-    QTextCharFormat singleLineCommentFormat;
-    QTextCharFormat multiLineCommentFormat;
-    QTextCharFormat quotationFormat;
-    QTextCharFormat functionFormat;
-    
-signals:
-    
-public slots:
-    
+    QTextCharFormat baliseFormat;
+    QTextCharFormat attributFormat;
+    QTextCharFormat attributValueFormat;
+    QTextCharFormat doctypeFormat;
+    QRegExp doctypePattern;
+    QRegExp attributValuePattern;
+    QRegExp attributPattern;
+    QRegExp balisePattern;
 };
 
 #endif // HIGHLIGHTER_H

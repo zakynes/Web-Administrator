@@ -8,6 +8,11 @@ DialogLien::DialogLien(QString *url, QString *text, bool *annuler, QWidget *pare
     parentText(text),
     parentAnnuler(annuler)
 {
+    urlEdit = 0;
+    textEdit = 0;
+    ok = 0;
+    cancel = 0;
+
     urlEdit = new QLineEdit(*url);
     textEdit = new QLineEdit(*text);
 
@@ -37,6 +42,15 @@ DialogLien::DialogLien(QString *url, QString *text, bool *annuler, QWidget *pare
     connect(cancel, SIGNAL(released()), this, SLOT(close()));
 
     setModal(true);
+}
+
+
+DialogLien::~DialogLien()
+{
+    delete urlEdit;
+    delete textEdit;
+    delete ok;
+    delete cancel;
 }
 
 void DialogLien::valider()

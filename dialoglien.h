@@ -5,12 +5,17 @@
 #include <QLineEdit>
 #include <QPushButton>
 
+namespace WA_UI {
+class DialogLien;
+}
+
 class DialogLien : public QDialog
 {
     Q_OBJECT
 
 public:
-    DialogLien(QString *url, QString  *text, bool *annuler, QWidget *parent = 0);
+    explicit DialogLien(QString *url, QString  *text, bool *annuler, QWidget *parent = 0);
+    ~DialogLien();
 
 public slots:
     void valider();

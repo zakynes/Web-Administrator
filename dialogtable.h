@@ -6,12 +6,17 @@
 #include <QSpinBox>
 #include <QPushButton>
 
+namespace WA_UI {
+class DialogTable;
+}
+
 class DialogTable : public QDialog
 {
     Q_OBJECT
 
 public:
-    DialogTable(int *row, int *col, QString *titre, QWidget *parent = 0);
+    explicit DialogTable(int *row, int *col, QString *titre, QWidget *parent = 0);
+    ~DialogTable();
 
 public slots:
     void valider();

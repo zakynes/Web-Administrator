@@ -3,50 +3,66 @@
 Highlighter::Highlighter(QTextDocument *parent) :
     QSyntaxHighlighter(parent)
 {
+    baliseFormat.setFontWeight(QFont::Bold);
+    baliseFormat.setForeground(Qt::blue);
+
+    attributFormat.setFontWeight(QFont::Normal);
+    attributFormat.setForeground(Qt::darkMagenta);
+
+    attributValueFormat.setFontWeight(QFont::Normal);
+    attributValueFormat.setForeground(Qt::red);
+
+    doctypeFormat.setFontWeight(QFont::Light);
+    doctypeFormat.setForeground(Qt::darkCyan);
+
+    balisePattern.setPattern("(</?\\w+\\s?.*\\s?/?>)");
+    balisePattern.setMinimal(true);
+
+    attributPattern.setPattern("\\s+.+=\".*\"");
+    attributPattern.setMinimal(true);
+
+    attributValuePattern.setPattern("\".+\"");
+    attributValuePattern.setMinimal(true);
+
+    doctypePattern.setPattern("<!DOCTYPE.+>");
+    doctypePattern.setMinimal(true);
 }
 
 void Highlighter::highlightBlock(const QString &text)
 {
-    QTextCharFormat balise;
-    balise.setFontWeight(QFont::Bold);
-    balise.setForeground(Qt::blue);
-    QString pattern = "</?\\w+\\s?.*\\s?/?>";
-
-    QRegExp expression(pattern);
-    expression.setMinimal(true);
-    int index = text.indexOf(expression);
+    int index = text.indexOf(balisePattern);
     while (index >= 0)
     {
-       int length = expression.matchedLength();
-       setFormat(index, length, balise);
-       index = text.indexOf(expression, index + length);
+        balisePattern.indexIn(text, index);
+        QString capturedText = balisePattern.cap(1);
+
+        int lengthBalise = balisePattern.matchedLength();
+        setFormat(index, lengthBalise, baliseFormat);
+
+        int indexAttribut = capturedText.indexOf(attributPattern);
+        while(indexAttribut >= 0)
+        {
+            int lengthAttribut = attributPattern.matchedLength();
+            setFormat(index + indexAttribut, lengthAttribut, attributFormat);
+            indexAttribut = capturedText.indexOf(attributPattern, indexAttribut + lengthAttribut);
+        }
+
+        int indexAttributValue = capturedText.indexOf(attributValuePattern);
+        while(indexAttributValue >= 0)
+        {
+            int lengthAttributValue = attributValuePattern.matchedLength();
+            setFormat(index + indexAttributValue + 1, lengthAttributValue - 2, attributValueFormat);
+            indexAttributValue = capturedText.indexOf(attributValuePattern, indexAttributValue + lengthAttributValue);
+        }
+
+        index = text.indexOf(balisePattern, index + lengthBalise);
     }
 
-    QTextCharFormat attribut;
-    attribut.setFontWeight(QFont::Normal);
-    attribut.setForeground(Qt::darkMagenta);
-    pattern = "(style|name|type)=\".+\"";
 
-    expression.setPattern(pattern);
-    index = text.indexOf(expression);
-    while (index >= 0)
+    int indexDoctype = text.indexOf(doctypePattern);
+    if(indexDoctype >= 0)
     {
-      int length = expression.matchedLength();
-      setFormat(index, length, attribut);
-      index = text.indexOf(expression, index + length);
-    }
-
-    QTextCharFormat doctype;
-    doctype.setFontWeight(QFont::Light);
-    doctype.setForeground(Qt::darkCyan);
-    pattern = "<!DOCTYPE.+>";
-
-    expression.setPattern(pattern);
-    index = text.indexOf(expression);
-    while (index >= 0)
-    {
-      int length = expression.matchedLength();
-      setFormat(index, length, doctype);
-      index = text.indexOf(expression, index + length);
+        int lengthDoctype = doctypePattern.matchedLength();
+        setFormat(indexDoctype, lengthDoctype, doctypeFormat);
     }
 }

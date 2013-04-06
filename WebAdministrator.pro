@@ -5,11 +5,15 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = WebAdministrator
 TEMPLATE = app
+TRANSLATIONS    = wa_en.ts \
+                  wa_fr.ts
+CODECFORTR      = ISO-8859-5
 
 
 SOURCES += main.cpp\
@@ -20,7 +24,20 @@ SOURCES += main.cpp\
     dialogtable.cpp \
     siteview.cpp \
     block.cpp \
-    page.cpp
+    page.cpp \
+    sqlinterface.cpp \
+    htmlbuilder.cpp \
+    xmlnode.cpp \
+    action.cpp \
+    app.cpp \
+    navigationdock.cpp \
+    maincontroler.cpp \
+    editwidget.cpp \
+    tools.cpp \
+    editblockdialog.cpp \
+    settings.cpp \
+    serverinfo.cpp \
+    serverlistdialog.cpp
 
 HEADERS  += mainwindow.h \
     textedit.h \
@@ -29,9 +46,22 @@ HEADERS  += mainwindow.h \
     dialogtable.h \
     siteview.h \
     block.h \
-    page.h
+    page.h \
+    sqlinterface.h \
+    htmlbuilder.h \
+    xmlnode.h \
+    action.h \
+    app.h \
+    navigationdock.h \
+    maincontroler.h \
+    editwidget.h \
+    tools.h \
+    editblockdialog.h \
+    settings.h \
+    serverinfo.h \
+    serverlistdialog.h
 
-FORMS    += mainwindow.ui
+FORMS    +=
 
 OTHER_FILES += \
     ressources/images/aide.png \
@@ -69,4 +99,8 @@ OTHER_FILES += \
     ressources/images/icone128.png \
     ressources/images/icone48.png \
     ressources/images/options.png \
-    ressources/images/listeServer.png
+    ressources/images/listeServer.png \
+    ressources/images/flash-video.png
+
+RESOURCES += \
+    sourceFile.qrc
