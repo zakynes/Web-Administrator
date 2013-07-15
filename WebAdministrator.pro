@@ -21,7 +21,6 @@ SOURCES += main.cpp\
     textedit.cpp \
     highlighter.cpp \
     dialoglien.cpp \
-    dialogtable.cpp \
     siteview.cpp \
     block.cpp \
     page.cpp \
@@ -47,7 +46,6 @@ HEADERS  += mainwindow.h \
     siteview.h \
     block.h \
     page.h \
-    sqlinterface.h \
     htmlbuilder.h \
     xmlnode.h \
     action.h \
