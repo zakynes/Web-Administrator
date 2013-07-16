@@ -14,7 +14,7 @@
 #include <QTreeWidget>
 #include <QStatusBar>
 
-#include "sqlinterface.h"
+#include "DAO/sqlinterface.h"
 #include "textedit.h"
 #include "highlighter.h"
 #include "action.h"

@@ -8,8 +8,8 @@
 #include <QUrl>
 #include <QMessageBox>
 
-#include "dialoglien.h"
-#include "dialogtable.h"
+#include "Dialog/dialoglien.h"
+#include "Dialog/dialogtable.h"
 
 TextEdit::TextEdit(QTextEdit *parent) :
     QTextEdit(parent)

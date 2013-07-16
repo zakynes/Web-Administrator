@@ -1,5 +1,5 @@
 #include "maincontroler.h"
-#include "serverlistdialog.h"
+#include "Dialog/serverlistdialog.h"
 #include <QInputDialog>
 #include <QMessageBox>
 

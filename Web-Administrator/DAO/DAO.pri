@@ -1,3 +1,3 @@
-HEADERS += sqlinterface.h
+HEADERS += DAO/sqlinterface.h
 
-SOURCES += sqlinterface.cpp
+SOURCES += DAO/sqlinterface.cpp

@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QSqlError>
 
-#include "sqlinterface.h"
+#include "DAO/sqlinterface.h"
 #include "editwidget.h"
 #include "navigationdock.h"
 #include "tools.h"

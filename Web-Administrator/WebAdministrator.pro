@@ -15,16 +15,17 @@ TRANSLATIONS    = wa_en.ts \
                   wa_fr.ts
 CODECFORTR      = ISO-8859-5
 
+include(Dialog/dialog.pri)
+include(DAO/DAO.pri)
+
 
 SOURCES += main.cpp\
         mainwindow.cpp \
     textedit.cpp \
     highlighter.cpp \
-    dialoglien.cpp \
     siteview.cpp \
     block.cpp \
     page.cpp \
-    sqlinterface.cpp \
     htmlbuilder.cpp \
     xmlnode.cpp \
     action.cpp \
@@ -35,14 +36,11 @@ SOURCES += main.cpp\
     tools.cpp \
     editblockdialog.cpp \
     settings.cpp \
-    serverinfo.cpp \
-    serverlistdialog.cpp
+    serverinfo.cpp
 
 HEADERS  += mainwindow.h \
     textedit.h \
     highlighter.h \
-    dialoglien.h \
-    dialogtable.h \
     siteview.h \
     block.h \
     page.h \
@@ -56,10 +54,7 @@ HEADERS  += mainwindow.h \
     tools.h \
     editblockdialog.h \
     settings.h \
-    serverinfo.h \
-    serverlistdialog.h
-
-FORMS    +=
+    serverinfo.h
 
 OTHER_FILES += \
     ressources/images/aide.png \
